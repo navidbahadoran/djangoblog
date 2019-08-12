@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+    <fieldset class="form-group">
+        <legend class="border-bottom mb-4">Logout</legend>
+        <h6>Are you sure you want to log out?</h6>
+    </fieldset>
+    <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        {% if redirect_field_value %}
+            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+        {% endif %}
+        <div class="form-group">
+            <button class="btn btn-danger" type="submit">Yes, Log out</button>
+            <a class="btn btn-outline-secondary" href="{% url 'post-list' %}">Cancel</a>
+        </div>
+    </form>
+{% endblock content %}

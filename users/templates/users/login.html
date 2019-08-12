@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+{% load account socialaccount %}
+{% load socialaccount %}
+{% providers_media_js %}
+{% block content %}
+    {% if user.is_authenticated %}
+        <h3>You already logged in!</h3>
+    {% else %}
+        {% get_providers as socialaccount_providers %}
+        <div class="content-section">
+            <form method="POST">
+                {% csrf_token %}
+                <fieldset class="form-group">
+                    <legend class="border-bottom mb-4">Log In</legend>
+                    {% if socialaccount_providers %}
+                        <div class="form-group">
+                            <div class="auth-sign-up-facebook-button">
+                                    {% for provider in socialaccount_providers %}
+                                        <a title="{{provider.name}}" class="btn btn-primary sign-up-text fa-facebook"
+                                        href="{% provider_login_url provider.id process=login scope=scope auth_params=auth_params %}">
+                                        Login with {{provider.name}}</a>
+                                    {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                    {{ form | crispy }}
+                </fieldset>
+                <div class="form-group">
+                    <button class="btn btn-outline-info" type="submit">Login</button>
+                    <small class="text-muted ml-2">
+                         <a href="{% url 'password_reset' %}">Forgot Password?</a>
+                    </small>
+                </div>
+            </form>
+            <div class="border-top tp-3">
+                <small class="text-muted">
+                    Need an Account?<a class="ml-2" href="{% url 'register' %}">Sign Up Now</a>
+                </small>
+            </div>
+        </div>
+    {% endif %}
+{% endblock content %}
