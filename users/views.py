@@ -54,24 +54,3 @@ def profile(request):
     return render(request, template_name='users/profile.html', context=context)
 
 
-# class ProfileUpdateView(UpdateView):
-#     model = Profile
-#     template_name = 'users/profile.html'
-#     form_class = UserUpdateForm
-#     second_form_class = ProfileUpdateForm
-#
-#     def get_context_data(self, **kwargs):
-#         context = super().get(**kwargs)
-#         if self.request.POST:
-#             context['form'] = self.form_class(self.request.POST, instance=self.request.user)
-#             context['p_form'] = self.second_form_class(self.request.POST, self.request.FILES,
-#                                                        instance=self.request.user.profile)
-#         else:
-#             context['form'] = self.form_class(instance=self.request.user)
-#             context['p_form'] = self.second_form_class(instance=self.request.user.profile)
-#         return context
-#
-#     def form_valid(self, form):
-#         context = self.get_context_data()
-#         context['p_form'].save()
-#         messages.success(self.request, message=f'Your account has been updated!')

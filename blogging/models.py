@@ -31,5 +31,5 @@ class Category(models.Model):
 
 
 class PostCategory(models.Model):
-    cat_name = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category_name = models.ForeignKey(Category, on_delete=models.CASCADE)
     post_name = models.ForeignKey(Post, on_delete=models.CASCADE)
