@@ -21,12 +21,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY')
-# 'wy!@#(&g&t))a!!iv9$vj+(8$e81u57d0@-+c#33y3pox7mm53'
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-    # (os.environ.get('DEBUG') == "True")
 
-ALLOWED_HOSTS = ['myawesomedjangoblog.herokuapp.com']
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = (os.environ.get('DEBUG_VALUE') == "True")
+
+ALLOWED_HOSTS = [os.environ.get("ALLOWED_HOSTS")]
 
 
 # Application definition
