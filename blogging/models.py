@@ -18,18 +18,18 @@ class Post(models.Model):
         return reverse('post-detail', kwargs={'pk': self.pk})
 
 
+class PostCategory(models.Model):
+    category_name = models.ForeignKey('Category', on_delete=models.CASCADE)
+    post_name = models.ForeignKey(Post, on_delete=models.CASCADE)
+
+
 class Category(models.Model):
     name = models.CharField(max_length=128, unique=True)
     description = models.TextField(blank=True)
-    posts = models.ManyToManyField(Post, blank=True, related_name='categories')
+    posts = models.ManyToManyField(Post, blank=True, related_name='categories', through=PostCategory)
 
     class Meta:
         verbose_name_plural = 'Categories'
 
     def __str__(self):
         return self.name
-
-
-class PostCategory(models.Model):
-    category_name = models.ForeignKey(Category, on_delete=models.CASCADE)
-    post_name = models.ForeignKey(Post, on_delete=models.CASCADE)

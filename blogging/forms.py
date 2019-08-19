@@ -15,6 +15,12 @@ class PostUpdateForm(forms.ModelForm):
         widgets = {'published_date': DateInput()}
 
 
+class CategoryInline(InlineFormSetFactory):
+    model = PostCategory
+    fields = ['category_name']
+    factory_kwargs = {'extra': 2, 'max_num': None, 'can_delete': False}
+
+
 # ('', 'Choose from the list')
 #
 # CATEGORY_CHOICES = []
@@ -22,27 +28,25 @@ class PostUpdateForm(forms.ModelForm):
 #     CATEGORY_CHOICES.append((c.name, c.name))
 
 
-class CategoryUpdateForm(forms.ModelForm):
-    name = forms.ModelChoiceField(queryset=Category.objects.all(), to_field_name="name")
+# class CategoryUpdateForm(forms.ModelForm):
+#     name = forms.ModelChoiceField(queryset=Category.objects.all(), to_field_name="name")
 
     # name = forms.ChoiceField(choices=CATEGORY_CHOICES)
 
-    class Meta:
-        model = Category
-        fields = ['name']
-        labels = {'name': 'Category'}
-        help_texts = {'name': 'Choose category for your post'}
+    # class Meta:
+    #     model = Category
+    #     fields = ['name']
+    #     labels = {'name': 'Category'}
+    #     help_texts = {'name': 'Choose category for your post'}
         # widgets = {
         #     'name': forms.Select(choices=CATEGORY_CHOICES)
         # }
 
 
-CategoryUpdateFormset = forms.formset_factory(CategoryUpdateForm, extra=1, max_num=3, can_delete=True)
-CategoryUpdateInlineFormset = forms.inlineformset_factory(Post, PostCategory, fields=['category_name'], extra=1,
-                                                          max_num=3, formset=CategoryUpdateFormset)
+# CategoryUpdateFormset = forms.formset_factory(CategoryUpdateForm, extra=1, max_num=3, can_delete=True)
+# CategoryUpdateInlineFormset = forms.inlineformset_factory(Post, PostCategory, fields=['category_name'], extra=1,
+#                                                           max_num=3, formset=CategoryUpdateFormset)
 
 
-class CategoryInline(InlineFormSetFactory):
-    model = PostCategory
-    exclude = ['post_name']
-    # formset_class = CategoryFormset
+
+

@@ -142,6 +142,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")  # for heroku deployment
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "mysite/static"),
 ]
+# in case of using whitenoise to manage static files
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'

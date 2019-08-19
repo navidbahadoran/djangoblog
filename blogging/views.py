@@ -1,11 +1,11 @@
 from django.shortcuts import get_object_or_404
 from django.contrib.syndication.views import Feed
 from django.contrib.auth.models import User
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from blogging.models import Post, Category, PostCategory
-from blogging.forms import PostUpdateForm, CategoryUpdateFormset, CategoryUpdateForm, CategoryUpdateInlineFormset
-from django import forms
+from extra_views import CreateWithInlinesView, UpdateWithInlinesView
+from blogging.models import Post, Category
+from blogging.forms import PostUpdateForm, CategoryInline
 
 
 class LatestEntriesFeed(Feed):
@@ -67,50 +67,36 @@ class UserPostListView(ListView):
         return query_for_user.order_by('-published_date')
 
 
-class PostCreateView(LoginRequiredMixin, CreateView):
+class PostCreateView(LoginRequiredMixin, CreateWithInlinesView):
     model = Post
+    inlines = [CategoryInline]
     template_name = 'blogging/post_form.html'
     form_class = PostUpdateForm
 
-    def form_valid(self, form):
+    def forms_valid(self, form, inlines):
         form.instance.author = self.request.user
-        return super().form_valid(form)
+        for formset in inlines:
+            formset.instance.post_name = form.instance
+        return super().forms_valid(form, inlines)
 
 
-class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateWithInlinesView):
     model = Post
+    inlines = [CategoryInline]
     template_name = 'blogging/post_update.html'
     form_class = PostUpdateForm
-    update_formset_class = CategoryUpdateFormset
 
-    def form_valid(self, form):
-        context = self.get_context_data()
-        # context['update_formset'] = self.update_formset_class(self.request.POST)
-        # formset = context['update_formset']
-        # for cat in formset:
-        #     cat_name = cat.instance.name
-        #     if cat_name:
-        #         category_sample = Category.objects.filter(name=cat_name).first()
-        #         category_sample.posts.add(self.object)
-
-        return super().form_valid(form)
+    def forms_valid(self, form, inlines):
+        form.instance.author = self.request.user
+        for formset in inlines:
+            formset.instance.post_name = form.instance
+        return super().forms_valid(form, inlines)
 
     def test_func(self):
         post = self.get_object()
         if self.request.user == post.author:
             return True
         return False
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        post = self.get_object()
-        initial_value = []
-        for c in post.categories.all():
-            initial_value.append({'name': c.name})
-        context['update_formset'] = self.update_formset_class(initial=initial_value)
-        return context
-
-
 
 
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
