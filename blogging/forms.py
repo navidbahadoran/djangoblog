@@ -3,7 +3,7 @@ from blogging.models import Post, Category, PostCategory
 from extra_views import InlineFormSetFactory
 
 
-class DateInput(forms.DateInput):
+class DateInput(forms.DateTimeInput):
     """ widget for date picker"""
     input_type = 'date'
 
@@ -18,7 +18,11 @@ class PostUpdateForm(forms.ModelForm):
 class CategoryInline(InlineFormSetFactory):
     model = PostCategory
     fields = ['category_name']
-    factory_kwargs = {'extra': 2, 'max_num': None, 'can_delete': False}
+    factory_kwargs = {'extra': 1, 'max_num': None, 'can_delete': False}
+
+    class Meta:
+        labels = {'category_name': 'Category'}
+        help_texts = {'category_name': 'Choose category for your post'}
 
 
 # ('', 'Choose from the list')

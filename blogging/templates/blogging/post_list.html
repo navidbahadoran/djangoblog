@@ -11,13 +11,13 @@
                 </div>
                 <h2><a class="post-title" href="{% url 'post-detail' post.pk %}">{{ post.title }}</a></h2>
                 <p class="post-body">{{ post.text }}</p>
-                <ul class="categories">
-                    {% for category in post.categories.all %}
-                        <small>
-                            <li >{{ category }}</li>
-                        </small>
-                    {% endfor %}
-                </ul>
+{#                <ul class="categories">#}
+{#                    {% for category in post.categories.all %}#}
+{#                        <small>#}
+{#                            <li >{{ category }}</li>#}
+{#                        </small>#}
+{#                    {% endfor %}#}
+{#                </ul>#}
             </div>
         </article>
     {% endfor %}

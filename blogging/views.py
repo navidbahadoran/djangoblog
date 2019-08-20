@@ -70,6 +70,7 @@ class UserPostListView(ListView):
 class PostCreateView(LoginRequiredMixin, CreateWithInlinesView):
     model = Post
     inlines = [CategoryInline]
+    CategoryInline.factory_kwargs['can_delete'] = False
     template_name = 'blogging/post_form.html'
     form_class = PostUpdateForm
 

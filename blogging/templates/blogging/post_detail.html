@@ -5,7 +5,11 @@
         <div class="media-body">
             <div class="article-metadata">
                 <a class="mr-2" href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a>
-                <small class="text-muted">{{ post.published_date|date:"F d, Y" }}</small>
+                <ul style="list-style-type:none">
+                <li><small class="text-muted">Published: {{ post.published_date|date:"F d, Y" }}</small></li>
+                <li><small class="text-muted">Modified: {{ post.modified_date|date:"F d, Y" }}</small></li>
+                <li><small class="text-muted">Created: {{ post.created_date|date:"F d, Y" }}</small></li>
+                </ul>
                 {% if post.author == user %}
                     <div>
                         <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'post-update' post.pk %}">Update</a>

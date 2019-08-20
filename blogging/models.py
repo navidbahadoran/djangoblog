@@ -1,6 +1,29 @@
+import datetime
 from django.db import models  # <-- This is already in the file
 from django.contrib.auth.models import User
 from django.urls import reverse
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
+
+
+def validate_date(value):
+    if value.year > datetime.datetime.now().year:
+        raise ValidationError(
+            _('chosen date should be current or older'),
+            params={'value': value},
+        )
+    elif value.year == datetime.datetime.now().year:
+        if value.month > datetime.datetime.now().month:
+            raise ValidationError(
+                _('chosen date should be current or older'),
+                params={'value': value},
+            )
+        elif value.month == datetime.datetime.now().month:
+            if value.day > datetime.datetime.now().day:
+                raise ValidationError(
+                    _('chosen date should be current or older'),
+                    params={'value': value},
+                )
 
 
 class Post(models.Model):
@@ -9,7 +32,7 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     created_date = models.DateTimeField(auto_now_add=True)
     modified_date = models.DateTimeField(auto_now=True)
-    published_date = models.DateTimeField(blank=True, null=True)
+    published_date = models.DateTimeField(blank=True, null=True, validators=[validate_date])
 
     def __str__(self):
         return self.title
